@@ -1,101 +1,101 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-class CustomToast extends StatefulWidget {
-  final String message;
-  final AnimationController? controller;
-  const CustomToast({
-    super.key,
-    required this.message,
-    required this.controller,
-  });
-
-  @override
-  State<CustomToast> createState() => _CustomToastState();
-}
-
-class _CustomToastState extends State<CustomToast> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: widget.controller!,
-        builder: (context, _) {
-          return Material(
-            color: Colors.transparent,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: const Offset(0.0, 0.0),
-              ).animate(
-                CurvedAnimation(
-                  parent: widget.controller!,
-                  curve: Curves.bounceInOut,
-                ),
-              ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-                color: Colors.black,
-                child: Text(
-                  widget.message,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          );
-        });
-  }
-}
+import 'custom_toast.dart';
 
 class ToastService {
-  static OverlayEntry? overlayEntry;
+  static List<OverlayEntry?> overlayEntries = [];
+  static final List<double> _overlayPositions = [];
+  static List<AnimationController?> controllers = [];
+  static final Set<int> _disposedControllerIndexList = {};
   static OverlayState? overlayState;
-  static AnimationController? controller;
 
-  static void _reverseAnimation() {
-    controller?.reverse().then((_) {
-      overlayEntry?.remove();
-      controller?.dispose();
-    });
+  static void _reverseAnimation(int index) {
+    if (!_disposedControllerIndexList.contains(index)) {
+      controllers[index]?.reverse().then((_) async {
+        await Future.delayed(const Duration(milliseconds: 50));
+        _removeOverlayEntry(index);
+      });
+    }
   }
 
-  static void _forwardAnimation() {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => overlayState?.insert(overlayEntry!));
-    controller?.forward();
+  static void _removeOverlayEntry(int index) {
+    overlayEntries[index]?.remove();
+    controllers[index]?.dispose();
+    _disposedControllerIndexList.add(index);
+  }
+
+  static void _forwardAnimation(int index) {
+    overlayState?.insert(overlayEntries[index]!);
+    controllers[index]?.forward();
+  }
+
+  static double _calculatePosition(int index) {
+    return _overlayPositions[index];
+  }
+
+  static void _addOverlayPosition(int index) {
+    _overlayPositions.add(30);
+  }
+
+  static bool _isToastInFront(int index) =>
+      index > _overlayPositions.length - 6;
+  static void _updateOverlayPositions({bool isReverse = false}) {
+    for (int i = 0; i < _overlayPositions.length; i++) {
+      if (_isToastInFront(i)) {
+        _overlayPositions[i] =
+            isReverse ? _overlayPositions[i] - 14 : _overlayPositions[i] + 14;
+        overlayEntries[i]?.markNeedsBuild();
+      }
+    }
   }
 
   static Future<void> showToast(BuildContext context, String message) async {
     if (context.mounted) {
       overlayState = Overlay.of(context);
-      controller = AnimationController(
+      final controller = AnimationController(
         vsync: overlayState!,
         duration: const Duration(milliseconds: 1000),
         reverseDuration: const Duration(milliseconds: 1000),
       );
-      overlayEntry = OverlayEntry(
-        builder: (context) => Positioned(
-          bottom: 30.0,
-          left: 0,
+      controllers.add(controller);
+      int controllerIndex = controllers.indexOf(controller);
+      _addOverlayPosition(controllerIndex);
+      final overlayEntry = OverlayEntry(
+        builder: (context) => AnimatedPositioned(
+          bottom: _calculatePosition(controllerIndex),
+          left: 5,
           right: 0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.bounceOut,
           child: Dismissible(
             key: Key(message),
             direction: DismissDirection.down,
             onDismissed: (_) {
-              _reverseAnimation();
+              _removeOverlayEntry(controllers.indexOf(controller));
+              _updateOverlayPositions(isReverse: true);
             },
-            child: CustomToast(
-              message: message,
-              controller: controller,
+            child: AnimatedPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: max(_calculatePosition(controllerIndex) - 35, 0.0),
+              ),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.bounceOut,
+              child: CustomToast(
+                message: message,
+                isInFront: _isToastInFront(controllers.indexOf(controller)),
+                controller: controller,
+              ),
             ),
           ),
         ),
       );
-
-      if (overlayEntry != null) {
-        _forwardAnimation();
-        await Future.delayed(const Duration(milliseconds: 3000));
-        _reverseAnimation();
-      }
+      overlayEntries.add(overlayEntry);
+      _updateOverlayPositions();
+      _forwardAnimation(controllers.indexOf(controller));
+      await Future.delayed(const Duration(seconds: 6));
+      _reverseAnimation(controllers.indexOf(controller));
     }
   }
 }
