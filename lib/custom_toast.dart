@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 
 class CustomToast extends StatefulWidget {
-  final String message;
+  final String? message;
+  final Widget? child;
+  final Color? backgroundColor;
+  final Color? shadowColor;
   final AnimationController? controller;
   final bool isInFront;
+  final VoidCallback onTap;
+  final Curve? curve;
   const CustomToast({
     super.key,
     this.isInFront = false,
-    required this.message,
+    required this.onTap,
+    this.message,
+    this.child,
+    this.backgroundColor,
+    this.shadowColor,
     required this.controller,
-  });
+    this.curve,
+  }) : assert((message != null || message != '') || child != null);
 
   @override
   State<CustomToast> createState() => _CustomToastState();
@@ -30,26 +40,30 @@ class _CustomToastState extends State<CustomToast> {
               ).animate(
                 CurvedAnimation(
                   parent: widget.controller!,
-                  curve: Curves.elasticOut,
-                  reverseCurve: Curves.elasticOut,
+                  curve: widget.curve ?? Curves.elasticOut,
+                  reverseCurve: widget.curve ?? Curves.elasticOut,
                 ),
               ),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: widget.isInFront ? 10 : 3,
-                      color: Colors.grey.shade400,
-                    ),
-                  ],
-                ),
-                child: Text(
-                  widget.message,
+              child: InkWell(
+                onTap: widget.onTap,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: widget.backgroundColor ?? Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: widget.isInFront ? 10 : 3,
+                        color: widget.shadowColor ?? Colors.grey.shade400,
+                      ),
+                    ],
+                  ),
+                  child: widget.message == null
+                      ? widget.child
+                      : Text(
+                          widget.message!,
+                        ),
                 ),
               ),
             ),

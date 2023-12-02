@@ -27,9 +27,16 @@ class _MyAppState extends State<MyApp> {
         title: const Text('Toasty Box Example'),
       ),
       body: Center(
-        child: FilledButton.tonal(
+        child: ElevatedButton(
           onPressed: () {
-            ToastService.showToast(context, 'Hello, there! ${++i} 👋');
+            ToastService.showToast(
+              context,
+              child: const ListTile(
+                leading: Icon(Icons.celebration),
+                title: Text('Hi there!'),
+                subtitle: Text('This is my beautiful toast'),
+              ),
+            );
           },
           child: const Text('Toast'),
         ),
