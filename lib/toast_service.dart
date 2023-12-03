@@ -14,6 +14,16 @@ class ToastService {
   static final List<AnimationController?> _animationControllers = [];
   static OverlayState? _overlayState;
 
+  static int? _showToastNumber;
+
+  static void showToastNumber(int val) {
+    assert(val > 0,
+        "Show toast number can't be negative or zero. Default show toast number is 5.");
+    if (val > 0) {
+      _showToastNumber = val;
+    }
+  }
+
   static void _reverseAnimation(int index) {
     if (_overlayIndexList.contains(index)) {
       _animationControllers[index]?.reverse().then((_) async {
@@ -75,9 +85,11 @@ class ToastService {
   }
 
   static double _calculateOpacity(int index) {
-    if (_overlayIndexList.length <= 5) return 1;
-    final isFirstFiveToast =
-        _overlayIndexList.sublist(_overlayIndexList.length - 5).contains(index);
+    int noOfShowToast = _showToastNumber ?? 5;
+    if (_overlayIndexList.length <= noOfShowToast) return 1;
+    final isFirstFiveToast = _overlayIndexList
+        .sublist(_overlayIndexList.length - noOfShowToast)
+        .contains(index);
     return isFirstFiveToast ? 1 : 0;
   }
 
