@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toasty_box/toast_enums.dart';
 import 'package:toasty_box/toasty_box.dart';
 
 void main() {
@@ -25,20 +26,63 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Toasty Box Example'),
+        centerTitle: true,
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            ToastService.showToast(
-              context,
-              child: const ListTile(
-                leading: Icon(Icons.celebration),
-                title: Text('Hi there!'),
-                subtitle: Text('This is my beautiful toast'),
-              ),
-            );
-          },
-          child: const Text('Toast'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FilledButton.tonal(
+              onPressed: () {
+                ToastService.showToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a message toast 👋😎!"
+                );
+              },
+              child: const Text('Show Message Toast'),
+            ),
+            const SizedBox(height: 50,),
+            FilledButton(
+              onPressed: () {
+                ToastService.showToast(
+                  context,
+                  length: ToastLength.ages,
+                  expandedHeight: 150,
+                  child: ListTile(
+                    leading: const SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Icon(
+                        Icons.celebration,
+                        color: Colors.deepOrange,
+                        size: 30,
+                      ),
+                    ),
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Hi there!'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '${++i}',
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: const Text('This is my beautiful toast'),
+                  ),
+                );
+              },
+              child: const Text('Show Widget Toast'),
+            ),
+          ],
         ),
       ),
     );

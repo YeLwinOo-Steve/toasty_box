@@ -10,22 +10,12 @@ class ToastService {
   static final ToastViewManager<int> _expandedIndex = ToastViewManager<int>(-1);
   static final List<OverlayEntry?> _overlayEntries = [];
   static final List<double> _overlayPositions = [];
+  static final List<int> _overlayIndexList = [];
   static final List<AnimationController?> _animationControllers = [];
-  static final Set<int> _disposedControllerIndexList = {};
   static OverlayState? _overlayState;
 
-  static double? _expandedHeight;
-
-  static set expandedHeight(double val) {
-    if (val > 0.0) {
-      _expandedHeight = val;
-    }
-  }
-
-  static double get expandedHeight => (_expandedHeight ?? 100);
-
   static void _reverseAnimation(int index) {
-    if (!_disposedControllerIndexList.contains(index)) {
+    if (_overlayIndexList.contains(index)) {
       _animationControllers[index]?.reverse().then((_) async {
         await Future.delayed(const Duration(milliseconds: 50));
         _removeOverlayEntry(index);
@@ -36,7 +26,7 @@ class ToastService {
   static void _removeOverlayEntry(int index) {
     _overlayEntries[index]?.remove();
     _animationControllers[index]?.dispose();
-    _disposedControllerIndexList.add(index);
+    _overlayIndexList.remove(index);
   }
 
   static void _forwardAnimation(int index) {
@@ -50,6 +40,7 @@ class ToastService {
 
   static void _addOverlayPosition(int index, double? initialHeight) {
     _overlayPositions.add(initialHeight ?? 30);
+    _overlayIndexList.add(index);
   }
 
   static bool _isToastInFront(int index) =>
@@ -84,9 +75,10 @@ class ToastService {
   }
 
   static double _calculateOpacity(int index) {
-    // print(_disposedControllerIndexList);
-    // print(_overlayPositions);
-    return 1;
+    if (_overlayIndexList.length <= 5) return 1;
+    final isFirstFiveToast =
+        _overlayIndexList.sublist(_overlayIndexList.length - 5).contains(index);
+    return isFirstFiveToast ? 1 : 0;
   }
 
   static void _toggleExpand(int index) {
@@ -116,13 +108,17 @@ class ToastService {
     String? message,
     Widget? child,
     double? initialHeight,
+    double expandedHeight = 100,
     Color? backgroundColor,
     Color? foregroundColor,
     Color? shadowColor,
     Curve? slideCurve,
-    Curve positionCurve = Curves.bounceOut,
-    ToastLength duration = ToastLength.short,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
   }) async {
+    assert(expandedHeight >= 0.0,
+        "Expanded height should not be a negative number!");
     if (context.mounted) {
       _overlayState = Overlay.of(context);
       final controller = AnimationController(
@@ -143,7 +139,7 @@ class ToastService {
           curve: positionCurve,
           child: Dismissible(
             key: Key(UniqueKey().toString()),
-            direction: DismissDirection.down,
+            direction: dismissDirection,
             onDismissed: (_) {
               _removeOverlayEntry(_animationControllers.indexOf(controller));
               _updateOverlayPositions(
@@ -181,7 +177,7 @@ class ToastService {
       _overlayEntries.add(overlayEntry);
       _updateOverlayPositions();
       _forwardAnimation(_animationControllers.indexOf(controller));
-      await Future.delayed(_toastDuration(duration));
+      await Future.delayed(_toastDuration(length));
       _reverseAnimation(_animationControllers.indexOf(controller));
     }
   }
