@@ -1,6 +1,6 @@
 name: toasty_box
-description: A new Flutter package project.
-version: 0.0.1
+description: Beautiful animated toast library
+version: 1.0.1
 homepage:
 
 environment:

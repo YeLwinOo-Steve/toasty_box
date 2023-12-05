@@ -1,1 +1,1 @@
-enum ToastLength { short, medium, long, ages }
+enum ToastLength { short, medium, long, ages, never }

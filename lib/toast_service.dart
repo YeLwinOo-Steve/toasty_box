@@ -110,19 +110,23 @@ class ToastService {
         return const Duration(milliseconds: 3500);
       case ToastLength.long:
         return const Duration(milliseconds: 5000);
+      case ToastLength.ages:
+        return const Duration(minutes: 2);
       default:
-        return const Duration(minutes: 15);
+        return const Duration(hours: 24);
     }
   }
 
-  static Future<void> showToast(
+  static Future<void> _showToast(
     BuildContext context, {
     String? message,
+    TextStyle? messageStyle,
+    Widget? leading,
     Widget? child,
+    bool isClosable = false,
     double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
-    Color? foregroundColor,
     Color? shadowColor,
     Curve? slideCurve,
     Curve positionCurve = Curves.elasticOut,
@@ -172,20 +176,24 @@ class ToastService {
                 duration: const Duration(milliseconds: 500),
                 child: CustomToast(
                   message: message,
+                  messageStyle: messageStyle,
                   backgroundColor: backgroundColor,
                   shadowColor: shadowColor,
                   curve: slideCurve,
+                  isClosable: isClosable,
                   isInFront: _isToastInFront(
                       _animationControllers.indexOf(controller)),
                   controller: controller,
                   onTap: () => _toggleExpand(controllerIndex),
-                  onClose: (){
-                    _removeOverlayEntry(_animationControllers.indexOf(controller));
+                  onClose: () {
+                    _removeOverlayEntry(
+                        _animationControllers.indexOf(controller));
                     _updateOverlayPositions(
                       isReverse: true,
                       pos: _animationControllers.indexOf(controller),
                     );
                   },
+                  leading: leading,
                   child: child,
                 ),
               ),
@@ -199,5 +207,173 @@ class ToastService {
       await Future.delayed(_toastDuration(length));
       _reverseAnimation(_animationControllers.indexOf(controller));
     }
+  }
+
+  static Future<void> showToast(
+    BuildContext context, {
+    String? message,
+    TextStyle? messageStyle,
+    Widget? leading,
+    bool isClosable = false,
+    double? initialHeight,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
+    _showToast(
+      context,
+      message: message,
+      messageStyle: messageStyle,
+      isClosable: isClosable,
+      initialHeight: initialHeight,
+      expandedHeight: expandedHeight,
+      backgroundColor: backgroundColor,
+      shadowColor: shadowColor,
+      positionCurve: positionCurve,
+      length: length,
+      dismissDirection: dismissDirection,
+      leading: leading,
+    );
+  }
+
+  static Future<void> showWidgetToast(
+    BuildContext context, {
+    Widget? child,
+    bool isClosable = false,
+    double? initialHeight,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
+    _showToast(
+      context,
+      isClosable: isClosable,
+      initialHeight: initialHeight,
+      expandedHeight: expandedHeight,
+      backgroundColor: backgroundColor,
+      shadowColor: shadowColor,
+      positionCurve: positionCurve,
+      length: length,
+      dismissDirection: dismissDirection,
+      child: child,
+    );
+  }
+
+  static Future<void> showSuccessToast(
+    BuildContext context, {
+    String? message,
+    Widget? child,
+    Widget? leading,
+    bool isClosable = false,
+    double? initialHeight,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
+    _showToast(
+      context,
+      message: message,
+      messageStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      isClosable: isClosable,
+      initialHeight: initialHeight,
+      expandedHeight: expandedHeight,
+      backgroundColor: backgroundColor ?? Colors.green,
+      shadowColor: shadowColor ?? Colors.green.shade500,
+      positionCurve: positionCurve,
+      length: length,
+      dismissDirection: dismissDirection,
+      leading: leading ??
+          const Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+      child: child,
+    );
+  }
+
+  static Future<void> showErrorToast(
+    BuildContext context, {
+    String? message,
+    Widget? child,
+    bool isClosable = false,
+    double? initialHeight,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
+    _showToast(
+      context,
+      message: message,
+      messageStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      isClosable: isClosable,
+      initialHeight: initialHeight,
+      expandedHeight: expandedHeight,
+      backgroundColor: backgroundColor ?? Colors.red,
+      shadowColor: shadowColor ?? Colors.red.shade500,
+      positionCurve: positionCurve,
+      length: length,
+      dismissDirection: dismissDirection,
+      leading: const Icon(
+        Icons.error,
+        color: Colors.white,
+      ),
+      child: child,
+    );
+  }
+
+  static Future<void> showWarningToast(
+    BuildContext context, {
+    String? message,
+    Widget? child,
+    bool isClosable = false,
+    double? initialHeight,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
+    _showToast(
+      context,
+      message: message,
+      messageStyle: const TextStyle(
+        color: Colors.white,
+      ),
+      isClosable: isClosable,
+      initialHeight: initialHeight,
+      expandedHeight: expandedHeight,
+      backgroundColor: backgroundColor ?? Colors.orange,
+      shadowColor: shadowColor ?? Colors.orange.shade500,
+      positionCurve: positionCurve,
+      length: length,
+      dismissDirection: dismissDirection,
+      leading: const Icon(
+        Icons.warning,
+        color: Colors.white,
+      ),
+      child: child,
+    );
   }
 }

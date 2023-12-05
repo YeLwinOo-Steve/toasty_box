@@ -1,39 +1,220 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Toasty Box
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+__Toasty Box__ is a flutter plugin for showing beautiful animated toasts in your app. It comes with a fully customizable features and breath-taking animations. 
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## Table of Contents
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Usage](#basic-usage)
+  - [Customization](#customization)
+- [Example](#example)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Features
+## Installation
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+To use this plugin, add it to your `pubspec.yaml` file:
 
-## Getting started
+```yaml
+dependencies:
+  toasty_box: ^1.0.1
+```
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+
+
+Then, run:
+
+```bash
+$ flutter pub get
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### Basic Usage
+
+Import the package:
 
 ```dart
-const like = 'sample';
+import 'package:toasty_box/toasty_box.dart';
 ```
 
-## Additional information
+Show a simple message toast:
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+ToastService.showToast(
+                  context,
+                  message: "This is a message toast 👋😎!",
+                );
+```
+
+Pretty simple, isn't it? 😏
+
+### Customization
+
+You can customize the appearance of your toasts by providing additional parameters.
+
+For message toasts -
+
+```dart
+ToastService.showToast(
+                  context,
+                  isClosable: true,
+                  initialHeight: 80,
+                  backgroundColor: Colors.teal.shade500,
+                  shadowColor: Colors.teal.shade200,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a message toast 👋😎!",
+                  messageStyle: TextStyle(fontSize: 18),
+                  leading: const Icon(Icons.messenger),
+                  slideCurve: Curves.elasticInOut,
+                  positionCurve: Curves.bounceOut,
+                  dismissDirection: DismissDirection.none,
+                );
+```
+
+For widget toast - 
+
+```dar
+ToastService.showWidgetToast(
+                  context,
+                  isClosable: true,
+                  initialHeight: 80,
+                  backgroundColor: Colors.teal.shade500,
+                  shadowColor: Colors.teal.shade200,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  leading: const Icon(Icons.messenger),
+                  slideCurve: Curves.elasticInOut,
+                  positionCurve: Curves.bounceOut,
+                  dismissDirection: DismissDirection.none,
+                  child: Container(
+                  	color: Colors.blue,
+                  	child: Center(
+                  		child: Text('This is widget toast!'),
+                  	),
+                  ),
+                );
+```
+
+
+
+#### Customization Options
+
+- **`message`**: The text to be displayed in the toast.
+- **`messageStyle`**: Message text style to be displayed in the toast
+- **`leading`**: Leading widget in the toast
+- **`isClosable`**: Shows the close button as a trailing widget
+- **`initialHeight`**: Initial height of showing toast from bottom of the screen
+- **`expandedHeight`**: Height of the toast from bottom of the screen when it is tapped
+- **`length`**: The duration of the toast in `ToastLength` enum - `[short,medium,long,ages,never]`
+- **`backgroundColor`**: The background color of the toast.
+- **`shadowColor`**: Shadow color of the toast
+- **`slideCurve`**: Animation curve when list of toasts is reordered
+- **`positionCurve`**: Animation curve when toast enters the screen and exits from the screen
+- **`child`**: Widget in the toast to be shown
+
+Moreover, there are other 3 types of toast templates I've prepared for your need -
+
+For **Success Toast**:
+
+```dar
+ToastService.showSuccessToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a success toast 🥂!",
+                );
+```
+
+For **Warning Toast**:
+
+```dart
+ToastService.showWarningToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a warning toast!",
+                );
+```
+
+For **Error Toast**:
+
+```dart
+ToastService.showErrorToast(
+  context,
+  length: ToastLength.medium,
+  expandedHeight: 100,
+  message: "This is an error toast!",
+);
+```
+
+## Example
+
+Check out the example folder for a comprehensive implementation of how to use this plugin. The example demonstrates various customization options and use cases. You can run the example using:
+
+```bash
+$ cd example
+$ flutter run
+```
+
+
+
+## Contributing
+
+We welcome contributions! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+```
+
+MIT License
+
+Copyright (c) 2023 YE LWIN OO
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Certainly! The MIT License is a permissive open-source license that allows users to do anything they want with the project as long as they provide the original copyright and license notice in any copy of the project or substantial portion of it. Here's a template for an MIT License that you can use for your project:
+
+```plaintext
+
+```
+
+Replace `[year]` with the current year, and `[Your Name]` with your name or your organization's name. You can include this license text in a file named `LICENSE.md` at the root of your project.

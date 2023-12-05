@@ -40,9 +40,17 @@ class _MyAppState extends State<MyApp> {
               onPressed: () {
                 ToastService.showToast(
                   context,
+                  isClosable: true,
+                  initialHeight: 80,
+                  backgroundColor: Colors.teal.shade500,
+                  shadowColor: Colors.teal.shade200,
                   length: ToastLength.medium,
                   expandedHeight: 100,
                   message: "This is a message toast 👋😎!",
+                  leading: const Icon(Icons.messenger),
+                  slideCurve: Curves.elasticInOut,
+                  positionCurve: Curves.bounceOut,
+                  dismissDirection: DismissDirection.none,
                 );
               },
               child: const Text('Show Message Toast'),
@@ -52,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             ),
             FilledButton(
               onPressed: () {
-                ToastService.showToast(
+                ToastService.showWidgetToast(
                   context,
                   length: ToastLength.ages,
                   expandedHeight: 150,
@@ -87,6 +95,60 @@ class _MyAppState extends State<MyApp> {
                 );
               },
               child: const Text('Show Widget Toast'),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                ToastService.showSuccessToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a success toast 🥂!",
+                );
+              },
+              child: const Text('Show success toast'),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                ToastService.showWarningToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is a warning toast!",
+                );
+              },
+              child: const Text('Show warning toast'),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                ToastService.showErrorToast(
+                  context,
+                  length: ToastLength.medium,
+                  expandedHeight: 100,
+                  message: "This is an error toast!",
+                );
+              },
+              child: const Text('Show error toast'),
             ),
           ],
         ),

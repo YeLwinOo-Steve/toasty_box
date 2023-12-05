@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomToast extends StatefulWidget {
   final String? message;
+  final TextStyle? messageStyle;
   final Widget? child;
+  final Widget? leading;
   final Color? backgroundColor;
   final Color? shadowColor;
   final AnimationController? controller;
@@ -10,13 +12,17 @@ class CustomToast extends StatefulWidget {
   final VoidCallback onTap;
   final VoidCallback? onClose;
   final Curve? curve;
+  final bool? isClosable;
   const CustomToast({
     super.key,
     this.isInFront = false,
     required this.onTap,
     this.onClose,
     this.message,
+    this.messageStyle,
+    this.leading,
     this.child,
+    this.isClosable,
     this.backgroundColor,
     this.shadowColor,
     required this.controller,
@@ -70,25 +76,39 @@ class _CustomToastState extends State<CustomToast> {
                           ),
                         ],
                       ),
-                      child: widget.message == null
+                      child: (widget.child != null)
                           ? widget.child
-                          : Text(
-                              widget.message!,
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (widget.leading != null) ...[
+                                  widget.leading!,
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                ],
+                                if (widget.message != null)
+                                  Text(
+                                    widget.message!,
+                                    style: widget.messageStyle,
+                                  ),
+                              ],
                             ),
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    right: 16,
-                    bottom: 0,
-                    child: InkWell(
-                      onTap: widget.onClose,
-                      child: const Icon(
-                        Icons.close,
-                        size: 18,
+                  if (widget.isClosable ?? false)
+                    Positioned(
+                      top: 0,
+                      right: 16,
+                      bottom: 0,
+                      child: InkWell(
+                        onTap: widget.onClose,
+                        child: const Icon(
+                          Icons.close,
+                          size: 18,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
