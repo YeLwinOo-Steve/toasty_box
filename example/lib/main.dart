@@ -7,6 +7,10 @@ void main() {
     MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          primary: Colors.black,
+          seedColor: Colors.black,
+        ),
       ),
       home: MyApp(),
     ),
@@ -32,18 +36,20 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FilledButton.tonal(
+            FilledButton(
               onPressed: () {
                 ToastService.showToast(
                   context,
                   length: ToastLength.medium,
                   expandedHeight: 100,
-                  message: "This is a message toast 👋😎!"
+                  message: "This is a message toast 👋😎!",
                 );
               },
               child: const Text('Show Message Toast'),
             ),
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
             FilledButton(
               onPressed: () {
                 ToastService.showToast(

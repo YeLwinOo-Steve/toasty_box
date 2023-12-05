@@ -179,6 +179,8 @@ class ToastService {
                       _animationControllers.indexOf(controller)),
                   controller: controller,
                   onTap: () => _toggleExpand(controllerIndex),
+                  onClose: () => _reverseAnimation(
+                      _animationControllers.indexOf(controller)),
                   child: child,
                 ),
               ),

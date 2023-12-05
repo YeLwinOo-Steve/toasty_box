@@ -8,11 +8,13 @@ class CustomToast extends StatefulWidget {
   final AnimationController? controller;
   final bool isInFront;
   final VoidCallback onTap;
+  final VoidCallback? onClose;
   final Curve? curve;
   const CustomToast({
     super.key,
     this.isInFront = false,
     required this.onTap,
+    this.onClose,
     this.message,
     this.child,
     this.backgroundColor,
@@ -44,27 +46,50 @@ class _CustomToastState extends State<CustomToast> {
                   reverseCurve: widget.curve ?? Curves.elasticOut,
                 ),
               ),
-              child: InkWell(
-                onTap: widget.onTap,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: widget.backgroundColor ?? Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: widget.isInFront ? 10 : 3,
-                        color: widget.shadowColor ?? Colors.grey.shade400,
+              child: Stack(
+                children: [
+                  InkWell(
+                    onTap: widget.onTap,
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: widget.backgroundColor ?? Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: widget.isInFront ? 0.5 : 0.0,
+                            offset: const Offset(0.0, -1.0),
+                            color: widget.shadowColor ?? Colors.grey.shade400,
+                          ),
+                          BoxShadow(
+                            blurRadius: widget.isInFront ? 12 : 3,
+                            offset: const Offset(0.0, 7.0),
+                            color: widget.shadowColor ?? Colors.grey.shade400,
+                          ),
+                        ],
                       ),
-                    ],
+                      child: widget.message == null
+                          ? widget.child
+                          : Text(
+                              widget.message!,
+                            ),
+                    ),
                   ),
-                  child: widget.message == null
-                      ? widget.child
-                      : Text(
-                          widget.message!,
-                        ),
-                ),
+                  Positioned(
+                    top: 0,
+                    right: 16,
+                    bottom: 0,
+                    child: InkWell(
+                      onTap: widget.onClose,
+                      child: const Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
