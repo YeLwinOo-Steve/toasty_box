@@ -48,8 +48,8 @@ class ToastService {
     return _overlayPositions[index];
   }
 
-  static void _addOverlayPosition(int index, double? initialHeight) {
-    _overlayPositions.add(initialHeight ?? 30);
+  static void _addOverlayPosition(int index) {
+    _overlayPositions.add(30);
     _overlayIndexList.add(index);
   }
 
@@ -124,7 +124,6 @@ class ToastService {
     Widget? leading,
     Widget? child,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -144,7 +143,7 @@ class ToastService {
       );
       _animationControllers.add(controller);
       int controllerIndex = _animationControllers.indexOf(controller);
-      _addOverlayPosition(controllerIndex, initialHeight);
+      _addOverlayPosition(controllerIndex);
       final overlayEntry = OverlayEntry(
         builder: (context) => AnimatedPositioned(
           bottom: _calculatePosition(controllerIndex) +
@@ -215,7 +214,6 @@ class ToastService {
     TextStyle? messageStyle,
     Widget? leading,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -229,7 +227,6 @@ class ToastService {
       message: message,
       messageStyle: messageStyle,
       isClosable: isClosable,
-      initialHeight: initialHeight,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor,
       shadowColor: shadowColor,
@@ -244,7 +241,6 @@ class ToastService {
     BuildContext context, {
     Widget? child,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -256,7 +252,6 @@ class ToastService {
     _showToast(
       context,
       isClosable: isClosable,
-      initialHeight: initialHeight,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor,
       shadowColor: shadowColor,
@@ -273,7 +268,6 @@ class ToastService {
     Widget? child,
     Widget? leading,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -289,7 +283,6 @@ class ToastService {
         color: Colors.white,
       ),
       isClosable: isClosable,
-      initialHeight: initialHeight,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.green,
       shadowColor: shadowColor ?? Colors.green.shade500,
@@ -310,7 +303,6 @@ class ToastService {
     String? message,
     Widget? child,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -326,7 +318,6 @@ class ToastService {
         color: Colors.white,
       ),
       isClosable: isClosable,
-      initialHeight: initialHeight,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.red,
       shadowColor: shadowColor ?? Colors.red.shade500,
@@ -346,7 +337,6 @@ class ToastService {
     String? message,
     Widget? child,
     bool isClosable = false,
-    double? initialHeight,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -362,7 +352,6 @@ class ToastService {
         color: Colors.white,
       ),
       isClosable: isClosable,
-      initialHeight: initialHeight,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.orange,
       shadowColor: shadowColor ?? Colors.orange.shade500,

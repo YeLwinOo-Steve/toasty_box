@@ -56,6 +56,7 @@ class _CustomToastState extends State<CustomToast> {
                 children: [
                   InkWell(
                     onTap: widget.onTap,
+                    borderRadius: BorderRadius.circular(15),
                     child: Container(
                       width: MediaQuery.sizeOf(context).width,
                       padding: const EdgeInsets.symmetric(
@@ -79,7 +80,6 @@ class _CustomToastState extends State<CustomToast> {
                       child: (widget.child != null)
                           ? widget.child
                           : Row(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (widget.leading != null) ...[
                                   widget.leading!,
@@ -88,9 +88,11 @@ class _CustomToastState extends State<CustomToast> {
                                   ),
                                 ],
                                 if (widget.message != null)
-                                  Text(
-                                    widget.message!,
-                                    style: widget.messageStyle,
+                                  Expanded(
+                                    child: Text(
+                                      widget.message!,
+                                      style: widget.messageStyle,
+                                    ),
                                   ),
                               ],
                             ),
