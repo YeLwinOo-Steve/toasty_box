@@ -2,6 +2,10 @@
 
 __Toasty Box__ is a flutter plugin for showing beautiful animated toasts in your app. It comes with a fully customizable features and breath-taking animations. 
 
+
+
+<img src="A:\Playground Projects\Skill_Improvement\toasty_box\assets\toasty_box_example.gif" alt="Toasty box Example Video" style="zoom:33%;" />
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -49,6 +53,8 @@ ToastService.showToast(
 ```
 
 Pretty simple, isn't it? 😏
+
+| <img src="A:\Playground Projects\Skill_Improvement\toasty_box\assets\message_toast.jpg" alt="Message Toast Image" style="zoom:33%;" /> | <img src="A:\Playground Projects\Skill_Improvement\toasty_box\assets\widget_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />|
 
 ### Customization
 
