@@ -54,7 +54,11 @@ ToastService.showToast(
 
 Pretty simple, isn't it? 😏
 
-| <img src="assets/message_toast.jpg" alt="Message Toast Image" style="zoom:33%;" /> | <img src="assets/widget_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />|
+| Message Toast                                                | Widget Toast                                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="assets/message_toast.jpg" alt="Message Toast Image" style="zoom:33%;" /> | <img src="assets/widget_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" /> |
+
+
 
 ### Customization
 
@@ -131,6 +135,8 @@ ToastService.showSuccessToast(
                 );
 ```
 
+<img src="assets/success_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
+
 For **Warning Toast**:
 
 ```dart
@@ -142,6 +148,8 @@ ToastService.showWarningToast(
                 );
 ```
 
+<img src="assets/warning_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
+
 For **Error Toast**:
 
 ```dart
@@ -152,6 +160,10 @@ ToastService.showErrorToast(
   message: "This is an error toast!",
 );
 ```
+
+<img src="assets/error_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
+
+
 
 ## Example
 
