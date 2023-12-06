@@ -41,7 +41,6 @@ class _MyAppState extends State<MyApp> {
                 ToastService.showToast(
                   context,
                   isClosable: true,
-                  initialHeight: 80,
                   backgroundColor: Colors.teal.shade500,
                   shadowColor: Colors.teal.shade200,
                   length: ToastLength.medium,

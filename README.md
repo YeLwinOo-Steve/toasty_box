@@ -60,7 +60,6 @@ For message toasts -
 ToastService.showToast(
                   context,
                   isClosable: true,
-                  initialHeight: 80,
                   backgroundColor: Colors.teal.shade500,
                   shadowColor: Colors.teal.shade200,
                   length: ToastLength.medium,
@@ -80,7 +79,6 @@ For widget toast -
 ToastService.showWidgetToast(
                   context,
                   isClosable: true,
-                  initialHeight: 80,
                   backgroundColor: Colors.teal.shade500,
                   shadowColor: Colors.teal.shade200,
                   length: ToastLength.medium,
@@ -106,7 +104,6 @@ ToastService.showWidgetToast(
 - **`messageStyle`**: Message text style to be displayed in the toast
 - **`leading`**: Leading widget in the toast
 - **`isClosable`**: Shows the close button as a trailing widget
-- **`initialHeight`**: Initial height of showing toast from bottom of the screen
 - **`expandedHeight`**: Height of the toast from bottom of the screen when it is tapped
 - **`length`**: The duration of the toast in `ToastLength` enum - `[short,medium,long,ages,never]`
 - **`backgroundColor`**: The background color of the toast.
@@ -193,28 +190,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Certainly! The MIT License is a permissive open-source license that allows users to do anything they want with the project as long as they provide the original copyright and license notice in any copy of the project or substantial portion of it. Here's a template for an MIT License that you can use for your project:
-
-```plaintext
-
-```
-
-Replace `[year]` with the current year, and `[Your Name]` with your name or your organization's name. You can include this license text in a file named `LICENSE.md` at the root of your project.
+🏗️🏗️ More updates are coming soon...

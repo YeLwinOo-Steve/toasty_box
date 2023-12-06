@@ -1,3 +1,7 @@
-## 0.0.1
+## 1.0.2
 
-* TODO: Describe initial release.
+* Message Toast
+* Widget Toast
+* Success Toast
+* Warning Toast
+* Error Toast
