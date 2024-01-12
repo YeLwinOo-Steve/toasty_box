@@ -1,6 +1,6 @@
 name: toasty_box
 description: A beautiful toast library with heart-melting animations. Currently support 5 types of toast - MessageToast, WidgetToast, SuccessToast, WarningToastt, ErrorToast
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/YeLwinOo-Steve/toasty_box
 
 environment:
