@@ -3,8 +3,7 @@
 __Toasty Box__ is a flutter plugin for showing beautiful animated toasts in your app. It comes with a fully customizable features and breath-taking animations. 
 
 
-
-<img src="assets/toasty_box_example.gif" alt="Toasty box Example Video" style="zoom:33%;" />
+![Toasty Box Example Video](assets/toasty_box_example.gif)
 
 ## Table of Contents
 
@@ -56,7 +55,7 @@ Pretty simple, isn't it? 😏
 
 | Message Toast                                                | Widget Toast                                                 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="assets/message_toast.jpg" alt="Message Toast Image" style="zoom:33%;" /> | <img src="assets/widget_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" /> |
+| ![Message Toast](assets/message_toast.jpg) | ![Widget Toast](assets/widget_toast.jpg) |
 
 
 
@@ -135,7 +134,7 @@ ToastService.showSuccessToast(
                 );
 ```
 
-<img src="assets/success_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
+![Success Toast](assets/success_toast.jpg)
 
 For **Warning Toast**:
 
@@ -148,8 +147,7 @@ ToastService.showWarningToast(
                 );
 ```
 
-<img src="assets/warning_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
-
+![Warning Toast](assets/warning_toast.jpg)
 For **Error Toast**:
 
 ```dart
@@ -161,8 +159,7 @@ ToastService.showErrorToast(
 );
 ```
 
-<img src="assets/error_toast.jpg" alt="Widget Toast Image" style="zoom:33%;" />
-
+![Error Toast](assets/error_toast.jpg)
 
 
 ## Example
