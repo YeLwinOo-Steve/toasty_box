@@ -16,9 +16,11 @@ class ToastService {
 
   static int? _showToastNumber;
 
+  static final _cache = <dynamic, AnimationController>{};
+
   static void showToastNumber(int val) {
     assert(val > 0,
-        "Show toast number can't be negative or zero. Default show toast number is 5.");
+    "Show toast number can't be negative or zero. Default show toast number is 5.");
     if (val > 0) {
       _showToastNumber = val;
     }
@@ -29,6 +31,7 @@ class ToastService {
       _animationControllers[index]?.reverse().then((_) async {
         await Future.delayed(const Duration(milliseconds: 50));
         _removeOverlayEntry(index);
+        _cache.removeWhere((_, value) => value == _animationControllers[index]);
       });
     }
   }
@@ -118,22 +121,24 @@ class ToastService {
   }
 
   static Future<void> _showToast(
-    BuildContext context, {
-    String? message,
-    TextStyle? messageStyle,
-    Widget? leading,
-    Widget? child,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        String? message,
+        TextStyle? messageStyle,
+        Widget? leading,
+        Widget? child,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     assert(expandedHeight >= 0.0,
-        "Expanded height should not be a negative number!");
+    "Expanded height should not be a negative number!");
     if (context.mounted) {
       _overlayState = Overlay.of(context);
       final controller = AnimationController(
@@ -203,30 +208,38 @@ class ToastService {
       _overlayEntries.add(overlayEntry);
       _updateOverlayPositions();
       _forwardAnimation(_animationControllers.indexOf(controller));
-      await Future.delayed(_toastDuration(length));
-      _reverseAnimation(_animationControllers.indexOf(controller));
+      _cache.putIfAbsent(tag, () => controller);
+      if (isAutoDismiss) {
+        await Future.delayed(_toastDuration(length));
+        _reverseAnimation(_animationControllers.indexOf(controller));
+        _cache.removeWhere((_, value) => value == controller);
+      }
     }
   }
 
   static Future<void> showToast(
-    BuildContext context, {
-    String? message,
-    TextStyle? messageStyle,
-    Widget? leading,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        String? message,
+        TextStyle? messageStyle,
+        Widget? leading,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     _showToast(
       context,
+      tag: tag,
       message: message,
       messageStyle: messageStyle,
       isClosable: isClosable,
+      isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor,
       shadowColor: shadowColor,
@@ -238,20 +251,24 @@ class ToastService {
   }
 
   static Future<void> showWidgetToast(
-    BuildContext context, {
-    Widget? child,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        Widget? child,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     _showToast(
       context,
+      tag: tag,
       isClosable: isClosable,
+      isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor,
       shadowColor: shadowColor,
@@ -263,26 +280,30 @@ class ToastService {
   }
 
   static Future<void> showSuccessToast(
-    BuildContext context, {
-    String? message,
-    Widget? child,
-    Widget? leading,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        String? message,
+        Widget? child,
+        Widget? leading,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     _showToast(
       context,
+      tag: tag,
       message: message,
       messageStyle: const TextStyle(
         color: Colors.white,
       ),
       isClosable: isClosable,
+      isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.green,
       shadowColor: shadowColor ?? Colors.green.shade500,
@@ -299,25 +320,29 @@ class ToastService {
   }
 
   static Future<void> showErrorToast(
-    BuildContext context, {
-    String? message,
-    Widget? child,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        String? message,
+        Widget? child,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     _showToast(
       context,
+      tag: tag,
       message: message,
       messageStyle: const TextStyle(
         color: Colors.white,
       ),
       isClosable: isClosable,
+      isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.red,
       shadowColor: shadowColor ?? Colors.red.shade500,
@@ -333,25 +358,29 @@ class ToastService {
   }
 
   static Future<void> showWarningToast(
-    BuildContext context, {
-    String? message,
-    Widget? child,
-    bool isClosable = false,
-    double expandedHeight = 100,
-    Color? backgroundColor,
-    Color? shadowColor,
-    Curve? slideCurve,
-    Curve positionCurve = Curves.elasticOut,
-    ToastLength length = ToastLength.short,
-    DismissDirection dismissDirection = DismissDirection.down,
-  }) async {
+      BuildContext context, {
+        dynamic tag,
+        String? message,
+        Widget? child,
+        bool isClosable = false,
+        bool isAutoDismiss = true,
+        double expandedHeight = 100,
+        Color? backgroundColor,
+        Color? shadowColor,
+        Curve? slideCurve,
+        Curve positionCurve = Curves.elasticOut,
+        ToastLength length = ToastLength.short,
+        DismissDirection dismissDirection = DismissDirection.down,
+      }) async {
     _showToast(
       context,
+      tag: tag,
       message: message,
       messageStyle: const TextStyle(
         color: Colors.white,
       ),
       isClosable: isClosable,
+      isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.orange,
       shadowColor: shadowColor ?? Colors.orange.shade500,
@@ -364,5 +393,18 @@ class ToastService {
       ),
       child: child,
     );
+  }
+
+  ///dismiss
+  ///[tag]: dismiss specific toast, if null dismiss all
+  static void dismiss({dynamic tag}) {
+    if (tag != null) {
+      final controller = _cache[tag];
+      _reverseAnimation(_animationControllers.indexOf(controller));
+    } else {
+      for (int index = 0; index < _animationControllers.length; index++) {
+        _reverseAnimation(index);
+      }
+    }
   }
 }
