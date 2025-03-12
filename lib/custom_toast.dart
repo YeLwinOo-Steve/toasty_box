@@ -7,6 +7,7 @@ class CustomToast extends StatefulWidget {
   final Widget? leading;
   final Color? backgroundColor;
   final Color? shadowColor;
+  final Color? iconColor;
   final AnimationController? controller;
   final bool isInFront;
   final VoidCallback onTap;
@@ -26,6 +27,7 @@ class CustomToast extends StatefulWidget {
     this.isClosable,
     this.backgroundColor,
     this.shadowColor,
+    this.iconColor,
     required this.controller,
     this.curve,
   }) : assert((message != null || message != '') || child != null);
@@ -104,8 +106,9 @@ class _CustomToastState extends State<CustomToast> {
                     if (widget.isClosable ?? false)
                       InkWell(
                         onTap: widget.onClose,
-                        child: const Icon(
+                        child: Icon(
                           Icons.close,
+                          color: widget.iconColor,
                           size: 18,
                         ),
                       )
