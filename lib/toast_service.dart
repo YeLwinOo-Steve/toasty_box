@@ -20,19 +20,18 @@ class ToastService {
 
   static void showToastNumber(int val) {
     assert(val > 0,
-    "Show toast number can't be negative or zero. Default show toast number is 5.");
+        "Show toast number can't be negative or zero. Default show toast number is 5.");
     if (val > 0) {
       _showToastNumber = val;
     }
   }
 
-  static void _reverseAnimation(int index) {
+  static Future _reverseAnimation(int index) async {
     if (_overlayIndexList.contains(index)) {
-      _animationControllers[index]?.reverse().then((_) async {
-        await Future.delayed(const Duration(milliseconds: 50));
-        _removeOverlayEntry(index);
-        _cache.removeWhere((_, value) => value == _animationControllers[index]);
-      });
+      await _animationControllers[index]?.reverse();
+      await Future.delayed(const Duration(milliseconds: 50));
+      _removeOverlayEntry(index);
+      _cache.removeWhere((_, value) => value == _animationControllers[index]);
     }
   }
 
@@ -121,25 +120,25 @@ class ToastService {
   }
 
   static Future<void> _showToast(
-      BuildContext context, {
-        dynamic tag,
-        String? message,
-        TextStyle? messageStyle,
-        Widget? leading,
-        Widget? child,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    String? message,
+    TextStyle? messageStyle,
+    Widget? leading,
+    Widget? child,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     assert(expandedHeight >= 0.0,
-    "Expanded height should not be a negative number!");
+        "Expanded height should not be a negative number!");
     if (context.mounted) {
       _overlayState = Overlay.of(context);
       final controller = AnimationController(
@@ -220,22 +219,22 @@ class ToastService {
   }
 
   static Future<void> showToast(
-      BuildContext context, {
-        dynamic tag,
-        String? message,
-        TextStyle? messageStyle,
-        Widget? leading,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    String? message,
+    TextStyle? messageStyle,
+    Widget? leading,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     _showToast(
       context,
       tag: tag,
@@ -255,20 +254,20 @@ class ToastService {
   }
 
   static Future<void> showWidgetToast(
-      BuildContext context, {
-        dynamic tag,
-        Widget? child,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    Widget? child,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     _showToast(
       context,
       tag: tag,
@@ -286,22 +285,22 @@ class ToastService {
   }
 
   static Future<void> showSuccessToast(
-      BuildContext context, {
-        dynamic tag,
-        String? message,
-        Widget? child,
-        Widget? leading,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    String? message,
+    Widget? child,
+    Widget? leading,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     _showToast(
       context,
       tag: tag,
@@ -328,21 +327,21 @@ class ToastService {
   }
 
   static Future<void> showErrorToast(
-      BuildContext context, {
-        dynamic tag,
-        String? message,
-        Widget? child,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    String? message,
+    Widget? child,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     _showToast(
       context,
       tag: tag,
@@ -368,21 +367,21 @@ class ToastService {
   }
 
   static Future<void> showWarningToast(
-      BuildContext context, {
-        dynamic tag,
-        String? message,
-        Widget? child,
-        bool isClosable = false,
-        bool isAutoDismiss = true,
-        double expandedHeight = 100,
-        Color? backgroundColor,
-        Color? shadowColor,
-        Color? iconColor,
-        Curve? slideCurve,
-        Curve positionCurve = Curves.elasticOut,
-        ToastLength length = ToastLength.short,
-        DismissDirection dismissDirection = DismissDirection.down,
-      }) async {
+    BuildContext context, {
+    dynamic tag,
+    String? message,
+    Widget? child,
+    bool isClosable = false,
+    bool isAutoDismiss = true,
+    double expandedHeight = 100,
+    Color? backgroundColor,
+    Color? shadowColor,
+    Color? iconColor,
+    Curve? slideCurve,
+    Curve positionCurve = Curves.elasticOut,
+    ToastLength length = ToastLength.short,
+    DismissDirection dismissDirection = DismissDirection.down,
+  }) async {
     _showToast(
       context,
       tag: tag,
@@ -409,13 +408,13 @@ class ToastService {
 
   ///dismiss
   ///[tag]: dismiss specific toast, if null dismiss all
-  static void dismiss({dynamic tag}) {
+  static Future dismiss({dynamic tag}) async {
     if (tag != null) {
       final controller = _cache[tag];
-      _reverseAnimation(_animationControllers.indexOf(controller));
+      await _reverseAnimation(_animationControllers.indexOf(controller));
     } else {
       for (int index = 0; index < _animationControllers.length; index++) {
-        _reverseAnimation(index);
+        await _reverseAnimation(index);
       }
     }
   }
