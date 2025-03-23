@@ -26,11 +26,14 @@ class ToastService {
     }
   }
 
-  static Future _reverseAnimation(int index) async {
+  static Future _reverseAnimation(int index,
+      {bool isRemoveOverlay = true}) async {
     if (_overlayIndexList.contains(index)) {
       await _animationControllers[index]?.reverse();
       await Future.delayed(const Duration(milliseconds: 50));
-      _removeOverlayEntry(index);
+      if (isRemoveOverlay) {
+        _removeOverlayEntry(index);
+      }
       _cache.removeWhere((_, value) => value == _animationControllers[index]);
     }
   }
@@ -161,11 +164,7 @@ class ToastService {
             key: Key(UniqueKey().toString()),
             direction: dismissDirection,
             onDismissed: (_) {
-              _removeOverlayEntry(_animationControllers.indexOf(controller));
-              _updateOverlayPositions(
-                isReverse: true,
-                pos: _animationControllers.indexOf(controller),
-              );
+              _close(controller);
             },
             child: AnimatedPadding(
               padding: EdgeInsets.symmetric(
@@ -191,12 +190,7 @@ class ToastService {
                   controller: controller,
                   onTap: () => _toggleExpand(controllerIndex),
                   onClose: () {
-                    _removeOverlayEntry(
-                        _animationControllers.indexOf(controller));
-                    _updateOverlayPositions(
-                      isReverse: true,
-                      pos: _animationControllers.indexOf(controller),
-                    );
+                    _close(controller);
                   },
                   leading: leading,
                   child: child,
@@ -212,10 +206,20 @@ class ToastService {
       _cache.putIfAbsent(tag, () => controller);
       if (isAutoDismiss) {
         await Future.delayed(_toastDuration(length));
-        _reverseAnimation(_animationControllers.indexOf(controller));
-        _cache.removeWhere((_, value) => value == controller);
+        await _reverseAnimation(_animationControllers.indexOf(controller),
+            isRemoveOverlay: false);
+        _close(controller);
       }
     }
+  }
+
+  static void _close(AnimationController controller) {
+    _removeOverlayEntry(_animationControllers.indexOf(controller));
+    _updateOverlayPositions(
+      isReverse: true,
+      pos: _animationControllers.indexOf(controller),
+    );
+    _cache.removeWhere((_, value) => value == controller);
   }
 
   static Future<void> showToast(
