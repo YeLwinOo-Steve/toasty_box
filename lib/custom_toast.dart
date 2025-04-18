@@ -44,23 +44,25 @@ class _CustomToastState extends State<CustomToast> {
     return AnimatedBuilder(
         animation: widget.controller!,
         builder: (context, _) {
-          return Material(
-            color: Colors.transparent,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: Offset(0.0, widget.isTop == true ? 0.0 : 1.0),
-                end: Offset(0.0, widget.isTop == true ? 1.0 : 0.0),
-              ).animate(
-                CurvedAnimation(
-                  parent: widget.controller!,
-                  curve: widget.curve ?? Curves.elasticOut,
-                  reverseCurve: widget.curve ?? Curves.elasticOut,
-                ),
-              ),
+          final animationValue = CurvedAnimation(
+            parent: widget.controller!,
+            curve: widget.curve ?? Curves.elasticOut,
+            reverseCurve: widget.curve ?? Curves.elasticOut,
+          );
+
+          final offset = Tween<Offset>(
+            begin: Offset(0.0, widget.isTop == true ? -1 : 1.0),
+            end: Offset.zero,
+          ).evaluate(animationValue);
+          return AnimatedSlide(
+            offset: offset,
+            duration: Duration.zero,
+            child: Material(
+              type: MaterialType.transparency,
               child: Container(
                 width: MediaQuery.sizeOf(context).width,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: widget.backgroundColor ?? Colors.white,
@@ -82,27 +84,29 @@ class _CustomToastState extends State<CustomToast> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: widget.onTap,
+                        onTap: (){
+                          widget.onTap.call();
+                        },
                         borderRadius: BorderRadius.circular(15),
                         child: (widget.child != null)
                             ? widget.child
                             : Row(
-                                children: [
-                                  if (widget.leading != null) ...[
-                                    widget.leading!,
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                  ],
-                                  if (widget.message != null)
-                                    Expanded(
-                                      child: Text(
-                                        widget.message!,
-                                        style: widget.messageStyle,
-                                      ),
-                                    ),
-                                ],
+                          children: [
+                            if (widget.leading != null) ...[
+                              widget.leading!,
+                              const SizedBox(
+                                width: 10,
                               ),
+                            ],
+                            if (widget.message != null)
+                              Expanded(
+                                child: Text(
+                                  widget.message!,
+                                  style: widget.messageStyle,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                     if (widget.isClosable ?? false)

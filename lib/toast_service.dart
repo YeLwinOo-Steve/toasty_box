@@ -55,7 +55,7 @@ class ToastService {
   }
 
   static void _addOverlayPosition(int index) {
-    _overlayPositions.add(30);
+    _overlayPositions.add( 30);
     _overlayIndexList.add(index);
   }
 
@@ -160,16 +160,10 @@ class ToastService {
       final overlayEntry = OverlayEntry(
         builder: (context) {
           final position = _calculatePosition(controllerIndex) +
-              (_expandedIndex.value == controllerIndex
-                  ? expandedHeight
-                  : 0.0);
+              (_expandedIndex.value == controllerIndex ? expandedHeight : 0.0);
           return AnimatedPositioned(
-            top: isTop
-                ? _paddingTop -position
-                : null,
-            bottom: isTop
-                ? null
-                : position,
+            top: isTop ? _paddingTop + position : null,
+            bottom: isTop ? null : position,
             left: 10,
             right: 10,
             duration: const Duration(milliseconds: 500),
