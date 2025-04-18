@@ -14,6 +14,7 @@ class CustomToast extends StatefulWidget {
   final VoidCallback? onClose;
   final Curve? curve;
   final bool? isClosable;
+  final bool? isTop;
 
   const CustomToast({
     super.key,
@@ -25,6 +26,7 @@ class CustomToast extends StatefulWidget {
     this.leading,
     this.child,
     this.isClosable,
+    this.isTop,
     this.backgroundColor,
     this.shadowColor,
     this.iconColor,
@@ -46,8 +48,8 @@ class _CustomToastState extends State<CustomToast> {
             color: Colors.transparent,
             child: SlideTransition(
               position: Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: const Offset(0.0, 0.0),
+                begin: Offset(0.0, widget.isTop == true ? 0.0 : 1.0),
+                end: Offset(0.0, widget.isTop == true ? 1.0 : 0.0),
               ).animate(
                 CurvedAnimation(
                   parent: widget.controller!,
@@ -57,8 +59,8 @@ class _CustomToastState extends State<CustomToast> {
               ),
               child: Container(
                 width: MediaQuery.sizeOf(context).width,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: widget.backgroundColor ?? Colors.white,
@@ -85,22 +87,22 @@ class _CustomToastState extends State<CustomToast> {
                         child: (widget.child != null)
                             ? widget.child
                             : Row(
-                          children: [
-                            if (widget.leading != null) ...[
-                              widget.leading!,
-                              const SizedBox(
-                                width: 10,
+                                children: [
+                                  if (widget.leading != null) ...[
+                                    widget.leading!,
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                  ],
+                                  if (widget.message != null)
+                                    Expanded(
+                                      child: Text(
+                                        widget.message!,
+                                        style: widget.messageStyle,
+                                      ),
+                                    ),
+                                ],
                               ),
-                            ],
-                            if (widget.message != null)
-                              Expanded(
-                                child: Text(
-                                  widget.message!,
-                                  style: widget.messageStyle,
-                                ),
-                              ),
-                          ],
-                        ),
                       ),
                     ),
                     if (widget.isClosable ?? false)
@@ -114,7 +116,7 @@ class _CustomToastState extends State<CustomToast> {
                       )
                   ],
                 ),
-              ) ,
+              ),
             ),
           );
         });

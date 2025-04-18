@@ -15,6 +15,7 @@ class ToastService {
   static OverlayState? _overlayState;
 
   static int? _showToastNumber;
+  static double _paddingTop = 0;
 
   static final _cache = <dynamic, AnimationController>{};
 
@@ -131,6 +132,7 @@ class ToastService {
     Widget? child,
     bool isClosable = false,
     bool isAutoDismiss = true,
+    bool isTop = false,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -143,6 +145,9 @@ class ToastService {
     assert(expandedHeight >= 0.0,
         "Expanded height should not be a negative number!");
     if (context.mounted) {
+      if (_paddingTop == 0) {
+        _paddingTop = MediaQuery.of(context).padding.top;
+      }
       _overlayState = Overlay.of(context);
       final controller = AnimationController(
         vsync: _overlayState!,
@@ -153,52 +158,63 @@ class ToastService {
       int controllerIndex = _animationControllers.indexOf(controller);
       _addOverlayPosition(controllerIndex);
       final overlayEntry = OverlayEntry(
-        builder: (context) => AnimatedPositioned(
-          bottom: _calculatePosition(controllerIndex) +
-              (_expandedIndex.value == controllerIndex ? expandedHeight : 0.0),
-          left: 10,
-          right: 10,
-          duration: const Duration(milliseconds: 500),
-          curve: positionCurve,
-          child: Dismissible(
-            key: Key(UniqueKey().toString()),
-            direction: dismissDirection,
-            onDismissed: (_) {
-              _close(controller);
-            },
-            child: AnimatedPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: (_expandedIndex.value == controllerIndex
-                    ? 10
-                    : max(_calculatePosition(controllerIndex) - 35, 0.0)),
-              ),
-              duration: const Duration(milliseconds: 500),
-              curve: positionCurve,
-              child: AnimatedOpacity(
-                opacity: _calculateOpacity(controllerIndex),
+        builder: (context) {
+          final position = _calculatePosition(controllerIndex) +
+              (_expandedIndex.value == controllerIndex
+                  ? expandedHeight
+                  : 0.0);
+          return AnimatedPositioned(
+            top: isTop
+                ? _paddingTop -position
+                : null,
+            bottom: isTop
+                ? null
+                : position,
+            left: 10,
+            right: 10,
+            duration: const Duration(milliseconds: 500),
+            curve: positionCurve,
+            child: Dismissible(
+              key: Key(UniqueKey().toString()),
+              direction: dismissDirection,
+              onDismissed: (_) {
+                _close(controller);
+              },
+              child: AnimatedPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: (_expandedIndex.value == controllerIndex
+                      ? 10
+                      : max(_calculatePosition(controllerIndex) - 35, 0.0)),
+                ),
                 duration: const Duration(milliseconds: 500),
-                child: CustomToast(
-                  message: message,
-                  messageStyle: messageStyle,
-                  backgroundColor: backgroundColor,
-                  shadowColor: shadowColor,
-                  iconColor: iconColor,
-                  curve: slideCurve,
-                  isClosable: isClosable,
-                  isInFront: _isToastInFront(
-                      _animationControllers.indexOf(controller)),
-                  controller: controller,
-                  onTap: () => _toggleExpand(controllerIndex),
-                  onClose: () {
-                    _close(controller);
-                  },
-                  leading: leading,
-                  child: child,
+                curve: positionCurve,
+                child: AnimatedOpacity(
+                  opacity: _calculateOpacity(controllerIndex),
+                  duration: const Duration(milliseconds: 500),
+                  child: CustomToast(
+                    message: message,
+                    messageStyle: messageStyle,
+                    backgroundColor: backgroundColor,
+                    shadowColor: shadowColor,
+                    iconColor: iconColor,
+                    curve: slideCurve,
+                    isClosable: isClosable,
+                    isTop: isTop,
+                    isInFront: _isToastInFront(
+                        _animationControllers.indexOf(controller)),
+                    controller: controller,
+                    onTap: () => _toggleExpand(controllerIndex),
+                    onClose: () {
+                      _close(controller);
+                    },
+                    leading: leading,
+                    child: child,
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       );
       _overlayEntries.add(overlayEntry);
       _updateOverlayPositions();
@@ -230,6 +246,7 @@ class ToastService {
     Widget? leading,
     bool isClosable = false,
     bool isAutoDismiss = true,
+    bool isTop = false,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -244,6 +261,7 @@ class ToastService {
       tag: tag,
       message: message,
       messageStyle: messageStyle,
+      isTop: isTop,
       isClosable: isClosable,
       isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
@@ -261,6 +279,7 @@ class ToastService {
     BuildContext context, {
     dynamic tag,
     Widget? child,
+    bool isTop = false,
     bool isClosable = false,
     bool isAutoDismiss = true,
     double expandedHeight = 100,
@@ -275,6 +294,7 @@ class ToastService {
     _showToast(
       context,
       tag: tag,
+      isTop: isTop,
       isClosable: isClosable,
       isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
@@ -296,6 +316,7 @@ class ToastService {
     Widget? leading,
     bool isClosable = false,
     bool isAutoDismiss = true,
+    bool isTop = false,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -312,6 +333,7 @@ class ToastService {
       messageStyle: const TextStyle(
         color: Colors.white,
       ),
+      isTop: isTop,
       isClosable: isClosable,
       isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
@@ -337,6 +359,7 @@ class ToastService {
     Widget? child,
     bool isClosable = false,
     bool isAutoDismiss = true,
+    bool isTop = false,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -353,6 +376,7 @@ class ToastService {
       messageStyle: const TextStyle(
         color: Colors.white,
       ),
+      isTop: isTop,
       isClosable: isClosable,
       isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
@@ -377,6 +401,7 @@ class ToastService {
     Widget? child,
     bool isClosable = false,
     bool isAutoDismiss = true,
+    bool isTop = false,
     double expandedHeight = 100,
     Color? backgroundColor,
     Color? shadowColor,
@@ -394,6 +419,7 @@ class ToastService {
         color: Colors.white,
       ),
       isClosable: isClosable,
+      isTop: isTop,
       isAutoDismiss: isAutoDismiss,
       expandedHeight: expandedHeight,
       backgroundColor: backgroundColor ?? Colors.orange,
