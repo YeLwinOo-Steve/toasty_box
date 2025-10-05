@@ -24,6 +24,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int i = 0;
+  var tag = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +39,17 @@ class _MyAppState extends State<MyApp> {
           children: [
             FilledButton(
               onPressed: () {
+                tag = tag + 1;
                 ToastService.showToast(
                   context,
+                  tag: tag,
                   isClosable: true,
+                  isAutoDismiss: false,
                   backgroundColor: Colors.teal.shade500,
                   shadowColor: Colors.teal.shade200,
                   length: ToastLength.medium,
                   expandedHeight: 100,
-                  message: "This is a message toast 👋😎!",
+                  message: "This is a message toast 👋😎!$tag",
                   leading: const Icon(Icons.messenger),
                   slideCurve: Curves.elasticInOut,
                   positionCurve: Curves.bounceOut,
@@ -148,6 +152,16 @@ class _MyAppState extends State<MyApp> {
                 );
               },
               child: const Text('Show error toast'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                ToastService.dismiss(tag: 1);
+              },
+              child: const Text('dismiss toast'),
             ),
           ],
         ),
